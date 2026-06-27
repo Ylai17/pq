@@ -63,7 +63,7 @@
             border-radius: 6%;
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('../kb.png');
+            background-image: url('./kb.png');
             background-size: 100% 140%;
             background-repeat: no-repeat;
             background-position: center;
@@ -118,7 +118,7 @@
 
         .kirby-gift {
             width: 120px; height: 120px;
-            background-image: url('../kby.jpg');
+            background-image: url('./kby.jpg');
             background-size: cover;
             border-radius: 50%;
             margin: 0 auto;
@@ -220,12 +220,12 @@
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     <button class="btn btn-sm btn-outline-light" onclick="playMusic()" style="font-size: 0.5rem;">PLAY</button>
                     <button class="btn btn-sm btn-outline-light" onclick="pauseMusic()" style="font-size: 0.5rem;">PAUSE</button>
+                    <button class="btn btn-sm btn-outline-light" onclick="nextMusic()" style="font-size: 0.5rem;">NEXT</button>
                     <div id="time-info" style="font-size: 0.5rem;">00:00</div>
                 </div>
                 <audio id="audioElement" onplay="startViz()" onpause="stopViz()">
-                      <source src="../Poisson-Tree.mp3" type="audio/mpeg">
-                    <source src="../Dreaming-Of-You.mp3" type="audio/mpeg">
-                          
+                    <source src="./Poisson-Tree.mp3" type="audio/mpeg">
+                    <source src="./Dreaming-Of-You.mp3" type="audio/mpeg">
                 </audio>
             </div>
         </div>
@@ -240,7 +240,7 @@
             <p style="font-size: 0.5rem;">¡Si llegas a 12 clicks hay sorpresa!</p>
             <p style="font-size: 0.5rem;">Puntos: <span id="score">0</span></p>
             <div id="game-canvas">
-                <img src="../conejo.png" id="melon" class="melon-target" onclick="catchMelon(event)" alt="melon">
+                <img src="./conejo.png" id="melon" class="melon-target" onclick="catchMelon(event)" alt="melon">
             </div>
             <div id="game-win-msg" class="mt-3 d-none" style="font-size: 0.6rem; color: #ff00ee;">
                 ¡Atrapaste a Melon 12 veces, 12 asi como el dia que empezamos a hablar, te amo mi chica gamer linda✨
@@ -250,15 +250,15 @@
         <div class="card-love">
             <h2 class="text-center" style="color: var(--rosa-oscuro); font-size: 1rem;">📸 FOTOS LINDAS <3 </h2>
             <div class="row g-3 mt-2 gallery">
-                <div class="col-6 col-md-3"><img src="../maincra.PNG" onclick="celebrate()"></div>
-                <div class="col-6 col-md-3"><img src="../foto4.jpg" onclick="celebrate()"></div>
-                <div class="col-6 col-md-3"><img src="../foto.jpg" onclick="celebrate()"></div>
-                <div class="col-6 col-md-3"><img src="../fotoo.jpg" onclick="celebrate()"></div>
+                <div class="col-6 col-md-3"><img src="./maincra.PNG" onclick="celebrate()"></div>
+                <div class="col-6 col-md-3"><img src="./foto4.jpg" onclick="celebrate()"></div>
+                <div class="col-6 col-md-3"><img src="./foto.jpg" onclick="celebrate()"></div>
+                <div class="col-6 col-md-3"><img src="./fotoo.jpg" onclick="celebrate()"></div>
             </div>
         </div>
 
         <div class="text-center mb-5">
-            <a href="galaxia.html" class="btn-pixel">IR A NUESTRA GALAXIA 3D ✨</a>
+            <a href="./galaxia.html" target="_blank" class="btn-pixel">IR A NUESTRA GALAXIA 3D ✨</a>
         </div>
 
         <div class="card-love text-center">
@@ -274,13 +274,39 @@
     <script>
         const audio = document.getElementById("audioElement");
         const trackNameDisplay = document.getElementById("track-name");
+        let currentTrackIndex = 0;
         
         function playMusic() {
             audio.play();
-            let name = audio.querySelector('source').src.split('/').pop().replace('.mp3', '').replace(/_/g, ' ').toUpperCase();
-            trackNameDisplay.innerText = "PLAYING: " + name;
+            updateTrackName();
         }
-        function pauseMusic() { audio.pause(); trackNameDisplay.innerText = "STATUS: PAUSED"; }
+        
+        function pauseMusic() { 
+            audio.pause(); 
+            trackNameDisplay.innerText = "STATUS: PAUSED"; 
+        }
+
+        function updateTrackName() {
+            let sources = audio.getElementsByTagName('source');
+            if (sources.length > 0 && sources[currentTrackIndex]) {
+                let name = sources[currentTrackIndex].src.split('/').pop().replace('.mp3', '').replace(/_/g, ' ').toUpperCase();
+                trackNameDisplay.innerText = "PLAYING: " + name;
+            }
+        }
+
+        function nextMusic() {
+            let sources = audio.getElementsByTagName('source');
+            currentTrackIndex++;
+            if (currentTrackIndex >= sources.length) {
+                currentTrackIndex = 0; 
+            }
+            audio.src = sources[currentTrackIndex].src;
+            audio.load();
+            audio.play();
+            updateTrackName();
+        }
+
+        audio.addEventListener('ended', nextMusic);
 
         const viz = document.getElementById("viz");
         for(let i=0; i<30; i++) {
