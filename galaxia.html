@@ -97,7 +97,7 @@
             scene.add(light);
 
             const loader = new THREE.GLTFLoader();
-            loader.load('../arlette/fondo.glb', function(gltf) {
+            loader.load('../fondo.glb', function(gltf) {
                 spaceBackground = gltf.scene;
                 spaceBackground.scale.set(600, 600, 600); 
                 scene.add(spaceBackground);
@@ -181,7 +181,7 @@
 
         function createKirbyPlanet() {
             const geometry = new THREE.SphereGeometry(8, 64, 64);
-            const texture = new THREE.TextureLoader().load('../arlette/kby.jpg'); 
+            const texture = new THREE.TextureLoader().load('../kby.jpg'); 
             const material = new THREE.MeshPhongMaterial({ map: texture, shininess: 20 });
             kirbyPlanet = new THREE.Mesh(geometry, material);
             kirbyPlanet.position.set(-35, 15, -30); 
@@ -190,7 +190,7 @@
 
         function createMiniPlanets() {
             const geometry = new THREE.SphereGeometry(2.8, 32, 32);
-            const texture = new THREE.TextureLoader().load('../arlette/kby.jpg'); 
+            const texture = new THREE.TextureLoader().load('../kby.jpg'); 
             for(let i = 0; i < 8; i++) {
                 const mini = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ map: texture }));
                 const angle = (i / 8) * Math.PI * 2;
